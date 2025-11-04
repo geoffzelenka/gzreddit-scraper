@@ -1,5 +1,8 @@
 import json
+import os
 import praw
+
+from dotenv import load_dotenv
 
 
 # Expects a json file in the current working directory 
@@ -10,13 +13,12 @@ import praw
 
 class Reddit:
     def __init__(self):
-        with open('.creds', 'r') as credfile:
-            self.creds = json.load(credfile)
+        load_dotenv()
 
         self.reddit = praw.Reddit(
-            client_id=self.creds['REDDIT_KEY'],
-            client_secret=self.creds['REDDIT_SECRET'],
-            user_agent=self.creds['USER_AGENT']
+            client_id=os.getenv('REDDIT_KEY'),
+            client_secret=os.getenv('REDDIT_SECRET'),
+            user_agent=os.getenv('USER_AGENT')
         )
 
         print(f"Reddit instance is read-only: {self.reddit.read_only}")
