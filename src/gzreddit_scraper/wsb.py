@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 import re
+import sys
 
 from . import reddit
 from . import stonkset
 
 from collections import defaultdict
+from datetime import datetime
 from pprint import pprint
 
 
@@ -39,8 +41,8 @@ class WSBDailyWatcher:
         for t in tickers:
             self._stats["ticker_count"][t] += 1
 
-    def get_daily_thread_stats(self):
-        stickies = self._reddit.get_stickied_posts("wallstreetbets","Your Moves")
+    def get_daily_thread_stats(self, thread_name):
+        stickies = self._reddit.get_stickied_posts("wallstreetbets", thread_name)
         print(stickies)
 
         for sticky in stickies:
@@ -48,20 +50,32 @@ class WSBDailyWatcher:
             sticky.comments.replace_more(limit=0) # this flattens the comment tree
             for comment in sticky.comments.list():
                 self.process_comment(comment)
-                  
-            print(f"Processed {self._stats["comments_processed"]} comments")
-        
-        print(f"Comments from {len(self._stats["user_post_count"])} redditors") 
-        pprint(sorted(self._stats["user_post_count"].items(), key=lambda item: item[1], reverse=True))
-
-        print(f"Comments mentioned {len(self._stats["ticker_count"])} different tickers")
-        pprint(sorted(self._stats["ticker_count"].items(), key=lambda item: item[1], reverse=True))
-
+        return self._stats      
 
 
 def main():
+
+    now = datetime.now()
+    if now.weekday() > 4: # make sure its not the weekend
+        print("Its the weekend, no stonks")
+        sys.exit()
+
+    if now.hour < 16 and now.hour > 9: #Market hours(ish), check the daily thread
+        thread_name = "Daily Discussion"
+    else: # after hours
+        thread_name = "Your Moves"
+
+
     wsb = WSBDailyWatcher()
-    wsb.get_daily_thread_stats()
+    stats = wsb.get_daily_thread_stats(thread_name)
+
+    print(f"Processed {stats["comments_processed"]} comments")
+   
+    print(f"Comments from {len(stats["user_post_count"])} redditors") 
+    pprint(sorted(stats["user_post_count"].items(), key=lambda item: item[1], reverse=True))
+
+    print(f"Comments mentioned {len(stats["ticker_count"])} different tickers")
+    pprint(sorted(stats["ticker_count"].items(), key=lambda item: item[1], reverse=True))
 
 
 if __name__ == "__main__":
