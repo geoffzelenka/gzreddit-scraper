@@ -1,4 +1,4 @@
-
+from pathlib import Path
 
 class StonkSet:
     def __init__(self):
@@ -6,8 +6,8 @@ class StonkSet:
         self._stonkset = set()
     
         ticker_files = [
-            "resources/nasdaq_tickers.txt",
-            "resources/nyse_tickers.txt"
+            Path(__file__).parent / "resources" / "nasdaq_tickers.txt",
+            Path(__file__).parent / "resources" / "nyse_tickers.txt"
             ]
         for tf in ticker_files:
             with open(tf) as ticker_file:

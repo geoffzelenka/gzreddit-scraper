@@ -61,10 +61,11 @@ class Reddit:
         for i in [1, 2]:
             try:
                 stickied_posts.append(subreddit.sticky(number=i))
-                if title_filter:
-                    stickied_posts = [ post for post in stickied_posts if title_filter in post.title ]
             except praw.exceptions.NotFound:
                 pass
+
+        if title_filter:
+            stickied_posts = [ post for post in stickied_posts if title_filter in post.title ]
 
         return stickied_posts
 

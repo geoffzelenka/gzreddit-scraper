@@ -59,8 +59,10 @@ class WSBDailyWatcher:
 
 
 
-
-if __name__ == "__main__":
+def main():
     wsb = WSBDailyWatcher()
     wsb.get_daily_thread_stats()
-    
+
+
+if __name__ == "__main__":
+    main()
