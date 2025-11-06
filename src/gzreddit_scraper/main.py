@@ -1,7 +1,9 @@
-import reddit
-import stonkset
+#!/usr/bin/env python3
 
 import re
+
+from . import reddit
+from . import stonkset
 
 from collections import defaultdict
 from pprint import pprint
@@ -28,12 +30,12 @@ class WSBDailyWatcher:
 
     def process_comment(self, comment):
         self._stats["comments_processed"] += 1
-        if comment.author != None:
+        if comment.author is not None:
             self._stats["user_post_count"][comment.author.name] += 1
 
         comment_text = self.clean_text(comment.body)
         tickers = self._ticker_pattern.findall(comment_text)
-        tickers = [ t for t in tickers if self._stonks.contains(t.strip("$")) ]
+        tickers = [ t.upper().strip("$") for t in tickers if self._stonks.contains(t.strip("$")) ]
         for t in tickers:
             self._stats["ticker_count"][t] += 1
 

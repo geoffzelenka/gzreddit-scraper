@@ -2,6 +2,7 @@
 
 class StonkSet:
     def __init__(self):
+        """Initialize the set with ticker data"""
         self._stonkset = set()
     
         ticker_files = [
@@ -14,10 +15,12 @@ class StonkSet:
                     self._stonkset.add(ticker.rstrip())
 
     def contains(self, stonk):
+        """Test if the stonk ticker is in the set"""
         return stonk in self._stonkset
 
 
     def size(self):
+        """Return the number of tickers in the set"""
         return len(self._stonkset)
 
 

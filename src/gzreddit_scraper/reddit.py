@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 class Reddit:
     def __init__(self):
-        """INIT YO SELF"""
+        """Initialize our PRAW wrapper using our .env creds"""
         load_dotenv()
         required_vars = ['REDDIT_KEY', 'REDDIT_SECRET', 'USER_AGENT']
         missing = [var for var in required_vars if not os.getenv(var)]
@@ -58,12 +58,13 @@ class Reddit:
         subreddit = self.reddit.subreddit(subreddit_name)
 
         stickied_posts = []
-        try:
-            stickied_posts.append(subreddit.sticky(number=2))
-            if title_filter:
-                stickied_posts = [ post for post in stickied_posts if title_filter in post ]
-        except:
-            pass
+        for i in [1, 2]:
+            try:
+                stickied_posts.append(subreddit.sticky(number=i))
+                if title_filter:
+                    stickied_posts = [ post for post in stickied_posts if title_filter in post.title ]
+            except praw.exceptions.NotFound:
+                pass
 
         return stickied_posts
 
