@@ -58,9 +58,9 @@ def main():
     now = datetime.now()
     if now.weekday() > 4: # make sure its not the weekend
         print("Its the weekend, no stonks")
-        sys.exit()
+        sys.exit(0)
 
-    if now.hour < 16 and now.hour > 9: #Market hours(ish), check the daily thread
+    if 9 <= now.hour < 16: #Market hours(ish) 930am-4pm, check the daily thread
         thread_name = "Daily Discussion"
     else: # after hours
         thread_name = "Your Moves"
