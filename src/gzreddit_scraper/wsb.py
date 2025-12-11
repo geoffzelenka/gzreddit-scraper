@@ -11,8 +11,8 @@ from datetime import datetime
 from pprint import pprint
 
 
-class WSBDailyWatcher:
-    """Do some stats on the Daily Threads at WSB"""
+class WSBWatcher:
+    """Do some stats on WSB posts and comments"""
 
     def __init__(self):
         self._ticker_pattern = re.compile(r'\b\$?[A-Za-z]{1,5}\b')
@@ -25,19 +25,26 @@ class WSBDailyWatcher:
             "comments_processed": 0,
             }
 
+
     def clean_text(self, text):
         text = re.sub(r'http\S+', '', text)  # remove links
         text = re.sub(r'[^A-Za-z0-9$ .,!?\'"\-]+', ' ', text)
         return text.strip()
 
+    def get_tickers(self, text):
+        tickers = self._ticker_pattern.findall(comment_text)
+        tickers = [ t.upper().strip("$") for t in tickers if self._stonks.contains(t.strip("$")) ]
+        return tickers
+
+
     def process_comment(self, comment):
         self._stats["comments_processed"] += 1
         if comment.author is not None:
             self._stats["user_post_count"][comment.author.name] += 1
-
+        
         comment_text = self.clean_text(comment.body)
-        tickers = self._ticker_pattern.findall(comment_text)
-        tickers = [ t.upper().strip("$") for t in tickers if self._stonks.contains(t.strip("$")) ]
+        tickers = get_tickers(comment)
+
         for t in tickers:
             self._stats["ticker_count"][t] += 1
 

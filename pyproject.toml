@@ -32,3 +32,4 @@ gzreddit_scraper = ["resources/*.txt"]
 
 [project.scripts]
 wsbdaily = "gzreddit_scraper.wsb:main"
+scraper = "gzreddit_scraper.reddit_persist:main"

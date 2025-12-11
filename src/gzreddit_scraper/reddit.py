@@ -76,10 +76,11 @@ if __name__ == "__main__":
     r = Reddit()
 
     ten_mins_ago = time.time() - (10 * 60)
+    ten_hours_ago = time.time() - (10 * 60 * 60)
 
-    new_posts = r.get_new_posts("politics",ten_mins_ago)
+    new_posts = r.get_new_posts("wallstreetbetselite",ten_hours_ago)
 
     print(new_posts[0])
 
     for p in new_posts:
-        print(f"{p.title} - {datetime.fromtimestamp(p.created_utc)}")
+        print(f"{p.title} ({p.num_comments}) - {datetime.fromtimestamp(p.created_utc)} - {p.subreddit.display_name}")
