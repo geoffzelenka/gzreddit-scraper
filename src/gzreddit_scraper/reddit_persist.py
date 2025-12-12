@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import re
 import time
 
@@ -63,15 +64,20 @@ class RedditScraper:
                        'num_comments': sub.num_comments,
                        'score': sub.score,
                        'score_ration': sub.upvote_ratio,
+                       'url': sub.url,
                        'comments': self._process_comment_tree(sub.id, sub.comments)
                   }
                   for sub in submissions
                ]
         }
+        print(f"Data processed at {data['collected_at']} from {data['subreddit']} with {len(data['submissions'])} from {len(submissions)} collected submissions")
+        return data
 
     def _do_something_with_data(self, data):
-        """TODO: Replace this with a useful method"""
-        pprint(data)
+        """Persist to a json file for now"""
+        with open(f"results-{data['subreddit']}-{data['collected_at']}.json",'w') as outfile:
+            json.dump(data,outfile)
+
 
 
 
