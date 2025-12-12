@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ten_mins_ago = time.time() - (10 * 60)
     ten_hours_ago = time.time() - (10 * 60 * 60)
 
-    new_posts = r.get_new_posts("wallstreetbetselite",ten_hours_ago)
+    new_posts = r.get_new_posts("test",ten_hours_ago)
 
     print(new_posts[0])
 

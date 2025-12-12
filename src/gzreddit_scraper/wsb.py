@@ -32,7 +32,7 @@ class WSBWatcher:
         return text.strip()
 
     def get_tickers(self, text):
-        tickers = self._ticker_pattern.findall(comment_text)
+        tickers = self._ticker_pattern.findall(text)
         tickers = [ t.upper().strip("$") for t in tickers if self._stonks.contains(t.strip("$")) ]
         return tickers
 
@@ -43,7 +43,7 @@ class WSBWatcher:
             self._stats["user_post_count"][comment.author.name] += 1
         
         comment_text = self.clean_text(comment.body)
-        tickers = get_tickers(comment)
+        tickers = self.get_tickers(comment)
 
         for t in tickers:
             self._stats["ticker_count"][t] += 1
